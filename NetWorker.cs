@@ -111,12 +111,12 @@ namespace SlaveLoader2
                 Client?.Dispose();
             }
         }
-        public void Upload(UserINFOItem EndAdress, Func<bool> GetEndFlag, Func<FileInfo> GetFile, Action<string> NowStateEvent, int Deley = 1000)
+        public void Upload(UserINFOItem EndAdress, Func<bool> GetEndFlag, Func<FileInfo> GetFile, Action<string> NowStateEvent)
         {
             NowStateEvent($"Попытка подлючения к {EndAdress.ToString()}");
             var task = ConnectAsync(EndAdress.IPEnd, GetEndFlag);
             while (!(task.IsCompleted || GetEndFlag()))
-                Thread.Sleep(Deley);
+                Thread.Sleep(Settings.MySettings.RequestDeley);
             if (GetEndFlag())
             {
                 if (task.IsCompleted) task.Result.Close();
@@ -129,7 +129,7 @@ namespace SlaveLoader2
                 Task.Run(() =>
                 {
                     while (!GetEndFlag())
-                        Thread.Sleep(Deley);
+                        Thread.Sleep(Settings.MySettings.RequestDeley);
                     Client?.Close();
                 });
                 var file = GetFile();
@@ -155,7 +155,17 @@ namespace SlaveLoader2
                     NowStateEvent("Файл выгружается");
                     using (var filestream = file.OpenRead())
                     {
-                        stream.WriteToEnd(filestream, 8192, sum => NowStateEvent($"Выполнено {Math.Floor((double)sum * 100 / filestream.Length).ToString()}% {sum}/{filestream.Length}"));
+                        double NowPers = 0;
+                        void PublishSum(int sum)
+                        {
+                            var temp = Math.Round((double)sum * 100 / filestream.Length, Settings.MySettings.SignCount);
+                            if (temp != NowPers)
+                            {
+                                NowStateEvent($"Выполнено {temp.ToString()}% {sum}/{filestream.Length}");
+                                NowPers = temp;
+                            }
+                        }
+                        stream.WriteToEnd(filestream, Settings.MySettings.UploadBuffer, PublishSum);
                     }
                     NowStateEvent("Выгрузка завершена, ожидание подтверждения");
                     ansver = JsonConvert.DeserializeObject<DateRequest>(Encoding.UTF8.GetString(stream.ReadToEnd()));
@@ -191,7 +201,7 @@ namespace SlaveLoader2
             Task.Run(() =>
             {
                 while (!GetEndFlag())
-                    Thread.Sleep(1000);
+                    Thread.Sleep(Settings.MySettings.RequestDeley);
                 Client?.Close();
             });
             var user = GetDate().UserList.Find(u => u.IPEnd.ToString() == userEndPoint);
@@ -204,7 +214,17 @@ namespace SlaveLoader2
                 var clientstream = Client.GetStream();
                 var ansvBuff = NetWorkerReqest.Сonfirmed.ToUTF8Byte();
                 clientstream.Write(ansvBuff, 0, ansvBuff.Length);
-                filestream.WriteToEnd(clientstream, 8192, sum => NowStateEvent($"Выполнено {Math.Floor((double)sum * 100 / Date.ByteLength).ToString()}% {sum}/{Date.ByteLength}"), () => filestream.Length != Date.ByteLength);
+                double NowPers = 0;
+                void PublishSum(int sum)
+                {
+                    var temp = Math.Round((double)sum * 100 / Date.ByteLength, Settings.MySettings.SignCount);
+                    if (temp != NowPers)
+                    {
+                        NowStateEvent($"Выполнено {temp.ToString()}% {sum}/{Date.ByteLength}");
+                        NowPers = temp;
+                    }
+                }
+                filestream.WriteToEnd(clientstream, Settings.MySettings.DowloadBuffer, PublishSum, () => filestream.Length != Date.ByteLength);
                 if (filestream.Length == Date.ByteLength)
                 {
                     NowStateEvent("Файл записан успешно");
@@ -217,7 +237,7 @@ namespace SlaveLoader2
                 }
             }
         }
-        public void Ping(UserINFOItem EndAdress, Func<bool> GetEndFlag, Action<string> NowStateEvent, int Deley = 1000)
+        public void Ping(UserINFOItem EndAdress, Func<bool> GetEndFlag, Action<string> NowStateEvent)
         {
             int trycount = 0;
             bool GetEnd() => trycount == int.MaxValue ? true : GetEndFlag();
@@ -225,7 +245,7 @@ namespace SlaveLoader2
             while (!(GetEnd() || isDispose || task.IsCompleted))
             {
                 NowStateEvent($"Попытка подключения к {EndAdress.ToString()}: {(++trycount).ToString()}");
-                Thread.Sleep(Deley);
+                Thread.Sleep(Settings.MySettings.RequestDeley);
             }
             if (!task.IsCompleted || GetEnd()) return;
             TcpClient myClientSocket = task.Result;
@@ -247,7 +267,7 @@ namespace SlaveLoader2
                             NowStateEvent($"Время отклика: {Time.ToString()} ms");
                             if (EndAdress.Name != pingAnsv.Name) EndAdress.Name = pingAnsv.Name;
                         }
-                        Thread.Sleep(Deley);
+                        Thread.Sleep(Settings.MySettings.RequestDeley);
                     }
                 }
             }

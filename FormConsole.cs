@@ -15,7 +15,9 @@ namespace SlaveLoader2
         public bool Ending { get; private set; } = false;
         public FormConsole()
         {
-                InitializeComponent();
+            InitializeComponent();
+            this.ApplySettings();
+            Settings.SettingsChanges += this.ApplySettings;
         }
 
         public void Clear()
@@ -35,7 +37,11 @@ namespace SlaveLoader2
             }
             catch (InvalidOperationException ep) 
             {
-                TextPrinter.Text += message;
+                try
+                {
+                    TextPrinter.Text += message;
+                }
+                catch { }
             }
         }
 
@@ -47,12 +53,17 @@ namespace SlaveLoader2
             }
             catch (InvalidOperationException ep)
             {
-                TextPrinter.Text += message + Environment.NewLine;
+                try
+                {
+                    TextPrinter.Text += message + Environment.NewLine;
+                }
+                catch { }
             }
         }
 
         private void FormConsole_FormClosing(object sender, FormClosingEventArgs e)
         {
+            Settings.SettingsChanges -= this.ApplySettings;
             Ending = true;
         }
     }

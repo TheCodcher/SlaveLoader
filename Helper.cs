@@ -36,18 +36,6 @@ namespace SlaveLoader2
         public IPEndPoint IPEnd { get => new IPEndPoint(IP, Port); }
         public override string ToString() => _name == "" ? _ip : _name;
     }
-    class SaveInformation
-    {
-        public List<UserINFOItem> UserList { get; set; }
-        public UserINFOItem MyInfo { get; set; }
-        [JsonConstructor]
-        SaveInformation() { }
-        public SaveInformation(IEnumerable<UserINFOItem> UserList, UserINFOItem MyInfo)
-        {
-            this.MyInfo = MyInfo;
-            this.UserList = UserList.ToList();
-        }
-    }
     static class NetWorkerHelper
     {
         public static byte[] ToUTF8Byte(this NetWorker.NetWorkerReqest req) => new NetWorker.DateRequest(req).ToUTF8Byte();

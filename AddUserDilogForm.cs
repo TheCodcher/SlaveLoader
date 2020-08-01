@@ -16,6 +16,7 @@ namespace SlaveLoader2
         public AddUserDilogForm()
         {
             InitializeComponent();
+            this.ApplySettings();
         }
         /// <summary>
         /// Не безопасное свойство

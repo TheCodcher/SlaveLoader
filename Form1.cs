@@ -26,28 +26,11 @@ namespace SlaveLoader2
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\SlaveLoaderSavedSettings.json";
-            var file = new FileInfo(path);
-            try
-            {
-                using (var fs = file.OpenText())
-                {
-                    ProgrammDate = JsonConvert.DeserializeObject<SaveInformation>(fs.ReadToEnd());
-                }
-                if (ProgrammDate.MyInfo == null)
-                {
-                    ProgrammDate.MyInfo = new UserINFOItem(new IPEndPoint(IPAddress.Any, NetWorker.CreatePort(10000)));
-                }
-                if (ProgrammDate.UserList == null)
-                {
-                    ProgrammDate.UserList = new List<UserINFOItem>();
-                }
-            }
-            catch
-            {
-                File.CreateText(path).Close();
-                ProgrammDate = new SaveInformation(new List<UserINFOItem>(), new UserINFOItem(new IPEndPoint(IPAddress.Any, NetWorker.CreatePort(10000))));
-            }
+            Settings.LoadSettings();
+            this.ApplySettings();
+            Settings.SettingsChanges += this.ApplySettings;
+            ProgrammDate = Settings.LoadInfo();
+
             UserBox.Items.AddRange(ProgrammDate.UserList.ToArray());
             NameTextBox.Text = ProgrammDate.MyInfo.Name == ProgrammDate.MyInfo.IP.ToString() ? "" : ProgrammDate.MyInfo.Name;
             PortLabel.Text += ProgrammDate.MyInfo.Port;
@@ -94,17 +77,11 @@ namespace SlaveLoader2
         }
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            Settings.SettingsChanges -= this.ApplySettings;
+
             NetWorker.Dispose();
 
-            ProgrammDate.MyInfo.Name = NameTextBox.Text;
-            string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\SlaveLoaderSavedSettings.json";
-            var file = new FileInfo(path);
-            file.Delete();
-            using (var fs = file.Create())
-            {
-                var buff = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(ProgrammDate));
-                fs.Write(buff, 0, buff.Length);
-            }
+            Settings.SaveInfo(ProgrammDate);
         }
 
         private void AddUserBt_Click(object sender, EventArgs e)
@@ -173,6 +150,14 @@ namespace SlaveLoader2
         private void NameTextBox_TextChanged(object sender, EventArgs e)
         {
             ProgrammDate.MyInfo.Name = NameTextBox.Text;
+        }
+
+        private void SettingBt_Click(object sender, EventArgs e)
+        {
+            using(var settingForm = new SettingForm())
+            {
+                settingForm.ShowDialog();
+            }
         }
     }
 }

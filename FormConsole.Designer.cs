@@ -1,5 +1,6 @@
 ﻿namespace SlaveLoader2
 {
+    [BaseColor]
     partial class FormConsole
     {
         /// <summary>
@@ -65,7 +66,7 @@
         }
 
         #endregion
-
+        [ActiveColor]
         private System.Windows.Forms.TextBox TextPrinter;
     }
 }

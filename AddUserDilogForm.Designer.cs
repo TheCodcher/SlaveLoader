@@ -1,5 +1,6 @@
 ﻿namespace SlaveLoader2
 {
+    [BaseColor]
     partial class AddUserDilogForm
     {
         /// <summary>
@@ -133,12 +134,17 @@
         }
 
         #endregion
-
+        [ActiveColor]
         private System.Windows.Forms.TextBox IpTextBox;
+        [ActiveColor]
         private System.Windows.Forms.TextBox PortTextBox;
+        [BaseColor]
         private System.Windows.Forms.Label label1;
+        [ActiveColor]
         private System.Windows.Forms.Button AddBt;
+        [ActiveColor]
         private System.Windows.Forms.Button CancelBt;
+        [BaseColor]
         private System.Windows.Forms.Label label2;
     }
 }

@@ -1,5 +1,6 @@
 ﻿namespace SlaveLoader2
 {
+    [BaseColor]
     partial class Form1
     {
         /// <summary>
@@ -39,6 +40,7 @@
             this.NameTextBox = new System.Windows.Forms.TextBox();
             this.PortLabel = new System.Windows.Forms.Label();
             this.AddUserBt = new System.Windows.Forms.Button();
+            this.SettingBt = new System.Windows.Forms.Button();
             this.ButtonPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -49,22 +51,21 @@
             this.ButtonPanel.Controls.Add(this.InfoBt);
             this.ButtonPanel.Controls.Add(this.LoadBt);
             this.ButtonPanel.Controls.Add(this.PingBt);
-            this.ButtonPanel.Location = new System.Drawing.Point(16, 70);
+            this.ButtonPanel.Location = new System.Drawing.Point(16, 72);
             this.ButtonPanel.Name = "ButtonPanel";
-            this.ButtonPanel.Size = new System.Drawing.Size(364, 26);
+            this.ButtonPanel.Size = new System.Drawing.Size(322, 26);
             this.ButtonPanel.TabIndex = 1;
             this.ButtonPanel.Visible = false;
             // 
             // RemoveBt
             // 
-            this.RemoveBt.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.RemoveBt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(52)))), ((int)(((byte)(52)))));
             this.RemoveBt.Cursor = System.Windows.Forms.Cursors.Hand;
             this.RemoveBt.FlatAppearance.BorderSize = 0;
             this.RemoveBt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.RemoveBt.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.RemoveBt.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.RemoveBt.Location = new System.Drawing.Point(290, 0);
+            this.RemoveBt.Location = new System.Drawing.Point(235, 0);
             this.RemoveBt.Margin = new System.Windows.Forms.Padding(0);
             this.RemoveBt.Name = "RemoveBt";
             this.RemoveBt.Size = new System.Drawing.Size(74, 22);
@@ -76,14 +77,13 @@
             // 
             // InfoBt
             // 
-            this.InfoBt.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.InfoBt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(52)))), ((int)(((byte)(52)))));
             this.InfoBt.Cursor = System.Windows.Forms.Cursors.Hand;
             this.InfoBt.FlatAppearance.BorderSize = 0;
             this.InfoBt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.InfoBt.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.InfoBt.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.InfoBt.Location = new System.Drawing.Point(205, 0);
+            this.InfoBt.Location = new System.Drawing.Point(162, 0);
             this.InfoBt.Margin = new System.Windows.Forms.Padding(0);
             this.InfoBt.Name = "InfoBt";
             this.InfoBt.Size = new System.Drawing.Size(63, 22);
@@ -95,14 +95,13 @@
             // 
             // LoadBt
             // 
-            this.LoadBt.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.LoadBt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(52)))), ((int)(((byte)(52)))));
             this.LoadBt.Cursor = System.Windows.Forms.Cursors.Hand;
             this.LoadBt.FlatAppearance.BorderSize = 0;
             this.LoadBt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.LoadBt.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.LoadBt.ForeColor = System.Drawing.Color.WhiteSmoke;
-            this.LoadBt.Location = new System.Drawing.Point(106, 0);
+            this.LoadBt.Location = new System.Drawing.Point(85, 0);
             this.LoadBt.Margin = new System.Windows.Forms.Padding(0);
             this.LoadBt.Name = "LoadBt";
             this.LoadBt.Size = new System.Drawing.Size(67, 22);
@@ -114,7 +113,6 @@
             // 
             // PingBt
             // 
-            this.PingBt.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.PingBt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(52)))), ((int)(((byte)(52)))), ((int)(((byte)(52)))));
             this.PingBt.Cursor = System.Windows.Forms.Cursors.Hand;
             this.PingBt.FlatAppearance.BorderSize = 0;
@@ -201,12 +199,31 @@
             this.AddUserBt.UseVisualStyleBackColor = false;
             this.AddUserBt.Click += new System.EventHandler(this.AddUserBt_Click);
             // 
+            // SettingBt
+            // 
+            this.SettingBt.BackColor = System.Drawing.Color.Transparent;
+            this.SettingBt.BackgroundImage = global::SlaveLoader2.Properties.Resources.lro_staffing_technology_icon;
+            this.SettingBt.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.SettingBt.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.SettingBt.FlatAppearance.BorderSize = 0;
+            this.SettingBt.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            this.SettingBt.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            this.SettingBt.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.SettingBt.ForeColor = System.Drawing.Color.Transparent;
+            this.SettingBt.Location = new System.Drawing.Point(344, 70);
+            this.SettingBt.Name = "SettingBt";
+            this.SettingBt.Size = new System.Drawing.Size(36, 28);
+            this.SettingBt.TabIndex = 7;
+            this.SettingBt.UseVisualStyleBackColor = false;
+            this.SettingBt.Click += new System.EventHandler(this.SettingBt_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(38)))), ((int)(((byte)(38)))), ((int)(((byte)(38)))));
             this.ClientSize = new System.Drawing.Size(397, 105);
+            this.Controls.Add(this.SettingBt);
             this.Controls.Add(this.AddUserBt);
             this.Controls.Add(this.PortLabel);
             this.Controls.Add(this.NameTextBox);
@@ -216,7 +233,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "SlaveLoader2 v1.0";
+            this.Text = "SlaveLoader2 v1.1";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ButtonPanel.ResumeLayout(false);
@@ -226,17 +243,27 @@
         }
 
         #endregion
-
+        [BaseColor]
         private System.Windows.Forms.Panel ButtonPanel;
+        [ActiveColor]
         private System.Windows.Forms.ComboBox UserBox;
+        [BaseColor]
         private System.Windows.Forms.Label NameLabel;
+        [ActiveColor]
         private System.Windows.Forms.TextBox NameTextBox;
+        [BaseColor]
         private System.Windows.Forms.Label PortLabel;
+        [ActiveColor]
         private System.Windows.Forms.Button AddUserBt;
+        [ActiveColor]
         private System.Windows.Forms.Button RemoveBt;
+        [ActiveColor]
         private System.Windows.Forms.Button InfoBt;
+        [ActiveColor]
         private System.Windows.Forms.Button LoadBt;
+        [ActiveColor]
         private System.Windows.Forms.Button PingBt;
+        private System.Windows.Forms.Button SettingBt;
     }
 }
 
