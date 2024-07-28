@@ -67,7 +67,7 @@ namespace SlaveLoader2
         {
             var textboxsvalues = GetType().GetRuntimeFields()
                 .Where(it => it.GetCustomAttribute(typeof(LinkedField)) != null)
-                .Where(it => typeof(SaveSettings).GetRuntimeField((it.GetCustomAttribute(typeof(LinkedField)) as LinkedField).FieldName).FieldType == typeof(int))
+                .Where(it => typeof(SaveSettings).GetRuntimeField((it.GetCustomAttribute(typeof(LinkedField)) as LinkedField).FieldName)?.FieldType == typeof(int))
                 .Select(it => (it.GetValue(this) as TextBox, (int)typeof(SaveSettings).GetRuntimeField((it.GetCustomAttribute(typeof(LinkedField)) as LinkedField).FieldName).GetValue(Settings.MySettings)));
             foreach (var t in textboxsvalues)
                 t.Item1.Text = t.Item2.ToString();

@@ -277,33 +277,33 @@
         private System.Windows.Forms.ColorDialog colorDialog;
 
         [ActiveColor]
-        [LinkedField("ActiveWindowColor", "BackColor")]
+        [LinkedField(nameof(SaveSettings.ActiveWindowColor), "BackColor")]
         private System.Windows.Forms.Button button1;
 
         [BaseColor]
-        [LinkedField("BaseWindowColor", "BackColor")]
+        [LinkedField(nameof(SaveSettings.BaseWindowColor), "BackColor")]
         private System.Windows.Forms.Button button2;
 
-        [LinkedField("FontColor", "BackColor")]
+        [LinkedField(nameof(SaveSettings.FontColor), "BackColor")]
         private System.Windows.Forms.Button button3;
 
         [ActiveColor]
-        [LinkedField("SignCount", "Text")]
+        [LinkedField(nameof(SaveSettings.SignCount), "Text")]
         [IntegerNumberScope(0,10)]
         private System.Windows.Forms.TextBox textBox1;
 
         [ActiveColor]
-        [LinkedField("UploadBuffer", "Text")]
+        [LinkedField(nameof(SaveSettings.UploadBuffer), "Text")]
         [IntegerNumberScope(1, 1048576)]
         private System.Windows.Forms.TextBox textBox2;
 
         [ActiveColor]
-        [LinkedField("DowloadBuffer", "Text")]
+        [LinkedField(nameof(SaveSettings.DownloadBuffer), "Text")]
         [IntegerNumberScope(1, 1048576)]
         private System.Windows.Forms.TextBox textBox3;
 
         [ActiveColor]
-        [LinkedField("RequestDeley", "Text")]
+        [LinkedField(nameof(SaveSettings.RequestDelay), "Text")]
         [IntegerNumberScope(8, 300000)]
         private System.Windows.Forms.TextBox textBox4;
 

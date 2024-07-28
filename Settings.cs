@@ -12,6 +12,7 @@ using System.Reflection;
 
 namespace SlaveLoader2
 {
+    //Ограничение WinForm
     static class Settings
     {
         public const string SaveInformationName = "SlaveLoaderSavedInformation.json";
