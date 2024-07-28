@@ -58,6 +58,7 @@
     <Compile Include="AddUserDilogForm.Designer.cs">
       <DependentUpon>AddUserDilogForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="NetWork\DownloadRequestData.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -71,9 +72,11 @@
       <DependentUpon>FormConsole.cs</DependentUpon>
     </Compile>
     <Compile Include="Helper.cs" />
-    <Compile Include="NetWorker.cs" />
+    <Compile Include="NetWork\NetWorker.cs" />
+    <Compile Include="NetWork\PingData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="NetWork\RequestData.cs" />
     <Compile Include="SettingForm.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -36,10 +36,12 @@ namespace SlaveLoader2
         public IPEndPoint IPEnd { get => new IPEndPoint(IP, Port); }
         public override string ToString() => _name == "" ? _ip : _name;
     }
-    static class NetWorkerHelper
+
+    static class NetWorkerExtentions
     {
-        public static byte[] ToUTF8Byte(this NetWorker.NetWorkerReqest req) => new NetWorker.DateRequest(req).ToUTF8Byte();
-        public static byte[] ReadToEnd(this NetworkStream sourceStream, int CellSize = 256)
+        public static byte[] ToUTF8Byte(this NetWorker.NetWorkerRequest req) => new NetWorker.RequestData(req).ToUTF8Byte();
+
+        public static byte[] ReadToEnd(this NetworkStream sourceStream, int cellSize = 256)
         {
             using (var memory = new MemoryStream()) 
             {
@@ -47,7 +49,7 @@ namespace SlaveLoader2
                 {
                     do
                     {
-                        var data = new byte[CellSize];
+                        var data = new byte[cellSize];
                         int bytes = sourceStream.Read(data, 0, data.Length);
                         writer.Write(data, 0, bytes);
                     }
@@ -56,18 +58,20 @@ namespace SlaveLoader2
                 return memory.ToArray();
             }
         }
-        public static void WriteToEnd(this Stream outStream, Stream sourceStream, int CellSize = 256, Action<int> PrograssByteSum = null)
+
+        public static void WriteToEnd(this Stream outStream, Stream sourceStream, int cellSize = 256, Action<int> progressByteSum = null)
         {
             int progress = 0;
             while (sourceStream.Position != sourceStream.Length)
             {
-                var buff = new byte[CellSize];
+                var buff = new byte[cellSize];
                 int bytes = sourceStream.Read(buff, 0, buff.Length);
                 progress += bytes;
                 outStream.Write(buff, 0, bytes);
-                PrograssByteSum?.Invoke(progress);
+                progressByteSum?.Invoke(progress);
             }
         }
+
         public static void WriteToEnd(this Stream outStream, NetworkStream sourceStream, int CellSize = 256, Action<int> PrograssByteSum = null, Func<bool> ExpectationFlag = null)
         {
             int progress = 0;

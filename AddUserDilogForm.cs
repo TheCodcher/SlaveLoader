@@ -33,6 +33,7 @@ namespace SlaveLoader2
                 MessageBox.Show("IPv4 адресс введен некоректно", "Parse Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
             try
             {
                 int.Parse(PortTextBox.Text);
@@ -42,6 +43,7 @@ namespace SlaveLoader2
                 MessageBox.Show("Port введен некоректно", "Parse Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
             DialogResult = DialogResult.OK;
             Close();
         }

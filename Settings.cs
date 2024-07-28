@@ -17,9 +17,13 @@ namespace SlaveLoader2
         public const string SaveInformationName = "SlaveLoaderSavedInformation.json";
         public const string SaveSettingName = "SlaveLoaderSavedSettings.json";
         public static readonly string DirPath = Environment.CurrentDirectory;
+
         public static event Action SettingsChanges;
+
         public static SaveSettings MySettings { get; set; }
+
         public static void CallEventSettingsChanges() => SettingsChanges?.Invoke();
+
         public static void ApplySettings(this Control form)
         {
             var fields = form.GetType().GetRuntimeFields()
@@ -27,16 +31,20 @@ namespace SlaveLoader2
                 .Where(inf => inf.GetCustomAttribute(typeof(ColorAttribute), false) != null)
                 .Select(inf => (inf.GetValue(form) as Control, inf.GetCustomAttribute(typeof(ActiveColor), false) != null))
                 .ToList();
+
             fields.Add((form, form.GetType().GetCustomAttribute(typeof(ActiveColor), false) != null));
+
             foreach (var c in fields)
             {
                 if (c.Item2)
                     c.Item1.BackColor = MySettings.ActiveWindowColor;
                 else
                     c.Item1.BackColor = MySettings.BaseWindowColor;
+
                 c.Item1.ForeColor = MySettings.FontColor;
             }
         }
+
         public static void LoadSettings()
         {
             var finalPath = Path.Combine(DirPath, SaveSettingName);
@@ -48,8 +56,11 @@ namespace SlaveLoader2
                     MySettings = JsonConvert.DeserializeObject<SaveSettings>(fs.ReadToEnd());
                 }
             }
-            if (MySettings == null) MySettings = new SaveSettings();
+
+            if (MySettings == null)
+                MySettings = new SaveSettings();
         }
+
         public static void SaveSettings() => Save(MySettings, SaveSettingName);
         public static void SaveInfo(SaveInformation source) => Save(source, SaveInformationName);
         private static void Save(object source, string name)
@@ -60,6 +71,7 @@ namespace SlaveLoader2
                 filestream.Write(buff, 0, buff.Length);
             }
         }
+
         public static SaveInformation LoadInfo()
         {
             var finalPath = Path.Combine(DirPath, SaveInformationName);
@@ -100,25 +112,30 @@ namespace SlaveLoader2
 
         public int UploadBuffer = 8192;
 
-        public int DowloadBuffer = 8192;
+        public int DownloadBuffer = 8192;
 
-        public int RequestDeley = 1000;
+        public int RequestDelay = 1000;
     }
+
     class SaveInformation
     {
         public List<UserINFOItem> UserList { get; set; }
         public UserINFOItem MyInfo { get; set; }
+
         [JsonConstructor]
-        SaveInformation() { }
+        public SaveInformation() { }
+
         public SaveInformation(IEnumerable<UserINFOItem> UserList, UserINFOItem MyInfo)
         {
             this.MyInfo = MyInfo;
             this.UserList = UserList.ToList();
         }
     }
+
     class ColorAttribute : Attribute { }
     class ActiveColor : ColorAttribute { }
     class BaseColor : ColorAttribute { }
+
     class LinkedField : Attribute
     {
         public readonly string FieldName;
@@ -129,6 +146,7 @@ namespace SlaveLoader2
             LinkedProperty = Property;
         }
     }
+
     class IntegerNumberScope : Attribute
     {
         public readonly int Min;

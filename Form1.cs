@@ -17,8 +17,9 @@ namespace SlaveLoader2
 {
     public partial class Form1 : Form
     {
-        static internal SaveInformation ProgrammDate { get; private set; }
+        static internal SaveInformation ProgramData { get; private set; }
         NetWorker NetWorker;
+
         public Form1()
         {
             InitializeComponent();
@@ -29,29 +30,31 @@ namespace SlaveLoader2
             Settings.LoadSettings();
             this.ApplySettings();
             Settings.SettingsChanges += this.ApplySettings;
-            ProgrammDate = Settings.LoadInfo();
+            ProgramData = Settings.LoadInfo();
 
-            UserBox.Items.AddRange(ProgrammDate.UserList.ToArray());
-            NameTextBox.Text = ProgrammDate.MyInfo.Name == ProgrammDate.MyInfo.IP.ToString() ? "" : ProgrammDate.MyInfo.Name;
-            PortLabel.Text += ProgrammDate.MyInfo.Port;
+            UserBox.Items.AddRange(ProgramData.UserList.ToArray());
+            NameTextBox.Text = ProgramData.MyInfo.Name == ProgramData.MyInfo.IP.ToString() ? "" : ProgramData.MyInfo.Name;
+            PortLabel.Text += ProgramData.MyInfo.Port;
 
-            NetWorker = new NetWorker(ProgrammDate.MyInfo.IPEnd, () => ProgrammDate, DowloadReqest);
+            NetWorker = new NetWorker(ProgramData.MyInfo.IPEnd, () => ProgramData, DownloadRequest);
         }
-        private FileInfo DowloadReqest(IPAddress RemoteIP, NetWorker.DownloadRequestDate Date, out Func<bool> GetEnd, out Action<string> StateEvent)
+
+        private FileInfo DownloadRequest(IPAddress remoteIP, NetWorker.DownloadRequestData data, out Func<bool> getEnd, out Action<string> stateEvent)
         {
-            GetEnd = null;
-            StateEvent = null;
-            var Remote = new IPEndPoint(RemoteIP, Date.ListenerPort);
-            var RemoteString = Remote.ToString();
-            var user = ProgrammDate.UserList.Find(u => u.IPEnd.ToString() == RemoteString);
+            getEnd = null;
+            stateEvent = null;
+            var remote = new IPEndPoint(remoteIP, data.ListenerPort);
+            var remoteString = remote.ToString();
+            var user = ProgramData.UserList.Find(u => u.IPEnd.ToString() == remoteString);
+
             if (user == null)
             {
-                user = new UserINFOItem(Remote);
-                if (MessageBox.Show($"Пользователя {RemoteString} нет в Вашем списке контактов, но он отправил запрос на загрузку файла. Хотите внести {RemoteString} в список контактов?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                user = new UserINFOItem(remote);
+                if (MessageBox.Show($"Пользователя {remoteString} нет в Вашем списке контактов, но он отправил запрос на загрузку файла. Хотите внести {remoteString} в список контактов?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     Invoke((Action)(() =>
                     {
-                        ProgrammDate.UserList.Add(user);
+                        ProgramData.UserList.Add(user);
                         UserBox.Items.Add(user);
                         UserBox.SelectedItem = user;
                         UserBox.Text = user.ToString();
@@ -59,29 +62,33 @@ namespace SlaveLoader2
                     }));
                 }
             }
-            var filedate = Date.GetFileSize();
-            if (MessageBox.Show($"Пользователь {user.ToString()} отправил запрос на загрузку файла. Хотите загрузить файл {Date.FileName} {Math.Round(filedate.Count, 3).ToString()} {filedate.Size.ToString()}?", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+            var filedate = data.GetFileSize();
+            if (MessageBox.Show($"Пользователь {user.ToString()} отправил запрос на загрузку файла. Хотите загрузить файл {data.FileName} {Math.Round(filedate.Count, 3).ToString()} {filedate.Size.ToString()}?",
+                "", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                 return null;
+
             string path = "";
             using (var file = new SaveFileDialog())
             {
-                file.FileName = Date.FileName;
+                file.FileName = data.FileName;
                 if ((DialogResult)Invoke((Func<DialogResult>)file.ShowDialog) == DialogResult.Cancel) return null;
                 path = file.FileName;
             }
+
             var consl = new FormConsole();
             Task.Run(() => Application.Run(consl));
-            GetEnd = () => consl.Ending;
-            StateEvent = consl.WriteLine;
+            getEnd = () => consl.Ending;
+            stateEvent = consl.WriteLine;
             return new FileInfo(path);
         }
+
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             Settings.SettingsChanges -= this.ApplySettings;
 
             NetWorker.Dispose();
 
-            Settings.SaveInfo(ProgrammDate);
+            Settings.SaveInfo(ProgramData);
         }
 
         private void AddUserBt_Click(object sender, EventArgs e)
@@ -91,7 +98,7 @@ namespace SlaveLoader2
                 var reqResult = DilogForm.ShowDialog();
                 if (reqResult == DialogResult.Cancel) return;
                 var temp = new UserINFOItem(DilogForm.ResultEndPoint);
-                ProgrammDate.UserList.Add(temp);
+                ProgramData.UserList.Add(temp);
                 UserBox.Items.Add(temp);
                 UserBox.SelectedItem = temp;
                 UserBox.Text = temp.ToString();
@@ -141,7 +148,7 @@ namespace SlaveLoader2
         private void RemoveBt_Click(object sender, EventArgs e)
         {
             var find = UserBox.SelectedItem as UserINFOItem;
-            ProgrammDate.UserList.Remove(find);
+            ProgramData.UserList.Remove(find);
             UserBox.Items.Remove(find);
             UserBox.Text = "";
             ButtonPanel.Visible = false;
@@ -149,7 +156,7 @@ namespace SlaveLoader2
 
         private void NameTextBox_TextChanged(object sender, EventArgs e)
         {
-            ProgrammDate.MyInfo.Name = NameTextBox.Text;
+            ProgramData.MyInfo.Name = NameTextBox.Text;
         }
 
         private void SettingBt_Click(object sender, EventArgs e)
